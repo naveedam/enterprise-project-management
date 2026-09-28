@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Enterprise PM Platform – Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f4f7;--card:#fff;--ink:#15202b;--mute:#647282;--line:#dde2e8;--acc:#2447c9;--accbg:#e3e9fb;--ok:#17703f;--okbg:#dcf3e5;--warn:#93500a;--warnbg:#fcecd0;--bad:#b3261e;--badbg:#fbe0dd;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f151c;--card:#182029;--ink:#e6ebf0;--mute:#93a1b0;--line:#2a3541;--acc:#8fa8ff;--accbg:#22315e;--ok:#6fdc9c;--okbg:#153a27;--warn:#f0b866;--warnbg:#3d2b0e;--bad:#ff8d85;--badbg:#431a17}}
+:root[data-theme="dark"]{--bg:#0f151c;--card:#182029;--ink:#e6ebf0;--mute:#93a1b0;--line:#2a3541;--acc:#8fa8ff;--accbg:#22315e;--ok:#6fdc9c;--okbg:#153a27;--warn:#f0b866;--warnbg:#3d2b0e;--bad:#ff8d85;--badbg:#431a17}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 'IBM Plex Sans',system-ui,sans-serif}
+.app{display:grid;grid-template-columns:208px 1fr;min-height:100vh}
+nav{background:var(--card);border-right:1px solid var(--line);padding:16px 10px;position:sticky;top:0;align-self:start;height:100vh;overflow:auto}
+nav h1{font-size:15px;margin:0 8px 14px;font-weight:600}
+nav button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--ink);padding:8px;border-radius:6px;font:inherit;cursor:pointer}
+nav button:hover{background:var(--bg)}nav button.on{background:var(--accbg);color:var(--acc);font-weight:600}
+nav button:disabled{color:var(--mute);cursor:default;background:none}
+main{padding:20px 24px;min-width:0}
+.top{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-bottom:14px;color:var(--mute)}
+select,input{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:6px 8px;max-width:100%}
+.hd{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+h2{margin:0;font-size:20px;font-weight:600}h3{margin:0 0 6px;font-size:16px}h4{margin:14px 0 6px;font-size:13px}
+.btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:6px 11px;border-radius:6px;cursor:pointer}
+.btn:hover{border-color:var(--acc)}.pri{background:var(--acc);color:var(--card);border-color:var(--acc)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.kpis .box{margin:0}.kpis b{display:block;font-size:26px;font-weight:600}.m{color:var(--mute)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.wrap{overflow-x:auto}table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--mute);font-weight:500}
+tr[data-a]{cursor:pointer}tr[data-a]:hover{background:var(--bg)}
+.b{display:inline-block;padding:1px 8px;border-radius:10px;background:var(--bg);border:1px solid var(--line);font-size:12px}
+.b.ok{background:var(--okbg);color:var(--ok);border-color:transparent}.b.warn{background:var(--warnbg);color:var(--warn);border-color:transparent}.b.bad{background:var(--badbg);color:var(--bad);border-color:transparent}
+.bar{display:flex;align-items:center;gap:8px;margin:5px 0}.bar i{display:block;height:10px;background:var(--acc);border-radius:3px;min-width:2px}.bar span{width:92px;flex:none}
+.kb{display:grid;grid-auto-flow:column;grid-auto-columns:214px;gap:10px;overflow-x:auto;padding-bottom:8px}
+.col{background:var(--line);border-radius:8px;padding:8px;min-height:120px}.col>b{display:flex;justify-content:space-between;margin:2px 4px 8px;font-size:13px}
+.tc{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:9px;margin-bottom:8px;cursor:pointer}
+.tc:hover{border-color:var(--acc)}.tc p{margin:0 0 6px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.stp{display:flex;gap:4px;flex-wrap:wrap;margin:10px 0}.stp span{padding:4px 10px;border-radius:14px;background:var(--bg);border:1px solid var(--line);font-size:12px}.stp .on{background:var(--acc);color:var(--card);border-color:var(--acc)}.stp .done{background:var(--accbg);color:var(--acc)}
+.rules{color:var(--mute);font-size:12.5px;border-left:3px solid var(--line);padding-left:10px;margin-top:14px}
+.ov{position:fixed;inset:0;background:rgba(10,15,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:6vh 12px;overflow:auto;z-index:5}
+.mb{background:var(--card);border-radius:10px;padding:18px;width:min(520px,100%)}
+.mb label{display:block;margin:8px 0 3px;color:var(--mute);font-size:12.5px}.mb input,.mb select{width:100%}
+.cm{background:var(--bg);border-radius:6px;padding:6px 9px;margin:4px 0}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--card);padding:9px 14px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .15s;z-index:9;max-width:90vw}
+#toast.show{opacity:1}#toast.bad{background:var(--bad);color:#fff}
+.lg{max-height:230px;overflow:auto}.lg p{margin:0;padding:4px 0;border-bottom:1px solid var(--line)}
+.tg{border:1px solid var(--line);background:var(--bg);color:var(--mute);border-radius:12px;padding:2px 9px;margin:2px;cursor:pointer;font:inherit;font-size:12.5px}.tg.on{background:var(--acc);border-color:var(--acc);color:var(--card)}
+@media(max-width:760px){.app{grid-template-columns:1fr}nav{position:static;height:auto;display:flex;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px}nav h1{display:none}nav button{width:auto;white-space:nowrap}.two{grid-template-columns:1fr}main{padding:14px}}
+</style></head>
+<body><div class="app"><nav id="nav"></nav><main><div class="top">Acting as <select id="role"></select></div><div id="v"></div></main></div>
+<div id="modal"></div><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),ROLES=['Project Manager','QA Lead','PMO','Team Member','Admin'];
+let role='Project Manager',view='dash',pf='All',crSel='CR-7',aud=[];
+const D={
+wf:{Open:['Assigned'],Assigned:['In Progress'],'In Progress':['Testing'],Testing:['Completed','In Progress'],Completed:['Closed'],Closed:[]},
+dwf:{New:['Assigned'],Assigned:['In Progress'],'In Progress':['Fixed'],Fixed:['Retest'],Retest:['Closed','In Progress'],Closed:['In Progress']},
+crw:['Submitted','Review','Impact Analysis','Approval','Development','UAT','Closed'],
+users:['Asha R','Ben K','Chitra M','Dev P','Esha T'],
+projects:[{id:'P-1',n:'Customer Portal',pm:'Asha R',s:'Active',a:'2026-09-01',e:'2026-12-15'},{id:'P-2',n:'Mobile App',pm:'Ben K',s:'Planning',a:'2026-10-10',e:'2027-02-28'},{id:'P-3',n:'Data Migration',pm:'',s:'Draft',a:'2026-11-01',e:'2027-01-31'}],
+tasks:[{id:'T-101',t:'Design database schema',p:'P-1',a:'Asha R',s:'In Progress',pr:'High',due:'2026-10-05',h:12},{id:'T-102',t:'Define RLS policies',p:'P-1',a:'Ben K',s:'Assigned',pr:'Medium',due:'2026-10-03',h:6,par:'T-101'},{id:'T-103',t:'Build login screen',p:'P-1',a:'Chitra M',s:'Testing',pr:'Medium',due:'2026-10-08',h:10},{id:'T-104',t:'Set up CI pipeline',p:'P-1',a:'Dev P',s:'Completed',pr:'Low',due:'2026-09-30',h:4},{id:'T-105',t:'Wireframe mobile flows',p:'P-2',a:'Esha T',s:'Open',pr:'High',due:'2026-10-12',h:16},{id:'T-106',t:'Legacy data audit',p:'P-3',a:'Ben K',s:'Assigned',pr:'Medium',due:'2026-10-20',h:8}],
+defects:[{id:'D-21',t:'Login fails on Safari',sev:'High',pr:'High',env:'UAT',a:'Chitra M',s:'In Progress',rc:'',rs:''},{id:'D-22',t:'Date picker off by one day',sev:'Medium',pr:'Low',env:'QA',a:'Dev P',s:'Retest',rc:'',rs:''},{id:'D-23',t:'CSV export drops columns',sev:'Low',pr:'Low',env:'Prod',a:'',s:'New',rc:'',rs:''},{id:'D-24',t:'Report load timeout',sev:'Critical',pr:'High',env:'Prod',a:'Ben K',s:'Fixed',rc:'',rs:''}],
+crs:[{id:'CR-7',t:'Add SSO for enterprise clients',pr:'High',cost:240000,s:'Impact Analysis',imp:0,uat:0},{id:'CR-8',t:'Bulk task import from Excel',pr:'Medium',cost:60000,s:'Submitted',imp:0,uat:0},{id:'CR-9',t:'Dark mode',pr:'Low',cost:30000,s:'UAT',imp:1,uat:0}],
+leave:[{id:'L-1',e:'Ben K',ty:'Annual',a:'2026-10-12',b:'2026-10-14',d:3,r:'Family event',s:'Manager Approval'},{id:'L-2',e:'Esha T',ty:'Sick',a:'2026-09-22',b:'2026-09-22',d:1,r:'Fever',s:'Approved'}],
+bal:{Annual:[18,6],Sick:[8,1],TOIL:[3,0]}};
+const RULE={'Completed>Closed':['Project Manager'],'Retest>Closed':['QA Lead'],'Approval>Development':['PMO'],'Manager Approval>Approved':['Project Manager']};
+const ok=(a,b)=>{const r=RULE[a+'>'+b];return!r||r.includes(role)||role==='Admin'};
+const lock=(a,b)=>'Only '+RULE[a+'>'+b].join(' / ')+' can do '+a+' → '+b;
+const log=m=>aud.unshift([new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),role,m]);
+const sc=s=>/Completed|Closed|Approved|Active/.test(s)?'ok':/Hold|Reject/.test(s)?'bad':/Progress|Testing|Development|UAT|Review|Retest|Approval|Fixed|Analysis/.test(s)?'warn':'';
+const b=(t,c)=>`<span class="b ${c||''}">${t}</span>`;
+const G=(a,i)=>D[a].find(x=>x.id===i),pn=i=>(G('projects',i)||{}).n||i;
+const opts=(l,v)=>l.map(x=>`<option ${x===v?'selected':''}>${x}</option>`).join('');
+const isc=s=>'Completed,Closed'.includes(s);
+function toast(m,bad){const t=$('#toast');t.textContent=m;t.className='show'+(bad?' bad':'');clearTimeout(toast.h);toast.h=setTimeout(()=>t.className='',2800)}
+const modal=h=>{$('#modal').innerHTML=h?`<div class="ov" data-a="close"><div class="mb">${h}</div></div>`:''};
+const cnt=(l,f)=>l.filter(f).length;
+const bars=(o)=>{const mx=Math.max(1,...Object.values(o));return Object.entries(o).map(([k,v])=>`<div class="bar"><span>${k}</span><i style="width:${v/mx*60}%"></i>${v}</div>`).join('')};
+const NAV=[['dash','Dashboard'],['proj','Projects'],['tasks','Tasks'],['def','Defects'],['cr','Change requests'],['wf','Workflow engine'],['leave','Leave'],['admin','Roles & access'],['x','Documents (phase 3)']];
+const V={
+dash(){const ts={};Object.keys(D.wf).forEach(s=>ts[s]=cnt(D.tasks,t=>t.s===s));const ds={};['Critical','High','Medium','Low'].forEach(s=>ds[s]=cnt(D.defects,d=>d.sev===s&&d.s!=='Closed'));
+return `<div class="hd"><h2>Dashboard</h2></div><div class="kpis">${[['Active projects',cnt(D.projects,p=>p.s==='Active')],['Open tasks',cnt(D.tasks,t=>!isc(t.s))],['Open defects',cnt(D.defects,d=>d.s!=='Closed')],['CRs awaiting decision',cnt(D.crs,c=>c.s!=='Closed'&&c.s!=='Development')],['Leave pending',cnt(D.leave,l=>l.s==='Manager Approval')]].map(k=>`<div class="box"><b>${k[1]}</b><span class="m">${k[0]}</span></div>`).join('')}</div>
+<div class="two"><div class="box"><h3>Tasks by status</h3>${bars(ts)}</div><div class="box"><h3>Open defects by severity</h3>${bars(ds)}</div></div>
+<div class="box"><h3>Audit trail</h3><div class="lg">${aud.map(a=>`<p><span class="m">${a[0]} · ${a[1]}</span> ${a[2]}</p>`).join('')||'<p class="m">Actions you take in the prototype are recorded here.</p>'}</div></div>`},
+proj(){return `<div class="hd"><h2>Projects</h2><button class="btn pri" data-a="newP">New project</button></div>
+<div class="box"><h3>Hierarchy</h3><div class="m">Workspace: Product Engineering ▸ Portfolio: Customer Products ▸ Program: Digital Channels ▸ Projects below ▸ Sub-projects</div></div>
+<div class="box wrap"><table><tr><th>ID</th><th>Project</th><th>Manager</th><th>Status</th><th>Dates</th><th>Done</th><th></th></tr>${D.projects.map(p=>{const t=D.tasks.filter(x=>x.p===p.id);const d=t.length?Math.round(cnt(t,x=>isc(x.s))/t.length*100):0;return `<tr><td>${p.id}</td><td>${p.n}</td><td>${p.pm||`<select data-c="pm" data-id="${p.id}"><option value="">Assign…</option>${opts(D.users)}</select>`}</td><td>${b(p.s,sc(p.s))}</td><td>${p.a} → ${p.e}</td><td>${d}%</td><td>${p.s!=='Active'?`<button class="btn" data-a="act" data-id="${p.id}">Activate</button>`:''}</td></tr>`}).join('')}</table></div>
+<div class="rules">Rules shown: a project can't be activated without a manager; start date must be before end date.</div>`},
+tasks(){const l=D.tasks.filter(t=>pf==='All'||t.p===pf);return `<div class="hd"><h2>Tasks</h2><div class="row"><select data-c="pf">${['All',...D.projects.map(p=>p.id)].map(x=>`<option value="${x}" ${x===pf?'selected':''}>${x==='All'?'All projects':x+' · '+pn(x)}</option>`).join('')}</select><button class="btn pri" data-a="newT">New task</button></div></div>
+<div class="kb">${Object.keys(D.wf).map(s=>{const c=l.filter(t=>t.s===s);return `<div class="col"><b>${s}<span class="m">${c.length}</span></b>${c.map(t=>`<div class="tc" data-a="ot" data-id="${t.id}"><p>${t.t}</p><span class="m">${t.id} · ${t.a}</span><div class="row">${b(t.pr)}${t.par?b('sub of '+t.par):''}</div></div>`).join('')}</div>`}).join('')}</div>
+<div class="rules">Columns come from the workflow engine. Try moving T-101 to Completed (blocked by its open subtask), or Completed → Closed as Team Member.</div>`},
+def(){return `<div class="hd"><h2>Defects</h2><button class="btn pri" data-a="newD">Log defect</button></div><div class="box wrap"><table><tr><th>ID</th><th>Summary</th><th>Severity</th><th>Priority</th><th>Env</th><th>Assigned</th><th>Status</th></tr>${D.defects.map(d=>`<tr data-a="od" data-id="${d.id}"><td>${d.id}</td><td>${d.t}</td><td>${b(d.sev,d.sev==='Critical'?'bad':d.sev==='High'?'warn':'')}</td><td>${d.pr}</td><td>${d.env}</td><td>${d.a||'—'}</td><td>${b(d.s,sc(d.s))}</td></tr>`).join('')}</table></div>
+<div class="rules">Open D-22 (Retest). Closing needs root cause and resolution category, and only a QA Lead can close from Retest.</div>`},
+cr(){const c=G('crs',crSel),i=D.crw.indexOf(c.s),n=D.crw[i+1];return `<div class="hd"><h2>Change requests</h2></div><div class="box wrap"><table><tr><th>ID</th><th>Title</th><th>Priority</th><th>Cost</th><th>Status</th></tr>${D.crs.map(x=>`<tr data-a="crs" data-id="${x.id}" ${x.id===crSel?'style="background:var(--accbg)"':''}><td>${x.id}</td><td>${x.t}</td><td>${x.pr}</td><td>₹${x.cost.toLocaleString('en-IN')}</td><td>${b(x.s,sc(x.s))}</td></tr>`).join('')}</table></div>
+<div class="box"><h3>${c.id} · ${c.t}</h3><div class="stp">${D.crw.map((s,j)=>`<span class="${j<i?'done':j===i?'on':''}">${s}</span>`).join('')}</div>
+<div class="row"><label><input type="checkbox" data-c="imp" ${c.imp?'checked':''}> Impact analysis complete</label><label><input type="checkbox" data-c="uat" ${c.uat?'checked':''}> UAT sign-off</label></div>
+${n?`<button class="btn pri" data-a="adv">Move to ${n}</button>`:'<span class="m">Closed</span>'}</div>
+<div class="rules">Impact analysis is required before approval, only PMO can approve, and closure needs UAT sign-off.</div>`},
+wf(){const s=Object.keys(D.wf);return `<div class="hd"><h2>Workflow engine</h2></div><div class="box"><h3>Task workflow</h3><p class="m">Toggle which transitions are allowed. The Tasks board follows immediately, so no code change is needed.</p><div class="wrap"><table>${s.map(f=>`<tr><th>${f}</th><td>${s.filter(t=>t!==f).map(t=>`<button class="tg ${D.wf[f].includes(t)?'on':''}" data-a="tgl" data-f="${f}" data-t="${t}">${t}</button>`).join('')}</td></tr>`).join('')}</table></div></div>
+<div class="rules">Role-restricted transitions (set in the workflow): Completed → Closed (Project Manager), Retest → Closed (QA Lead), Approval → Development (PMO).</div>`},
+leave(){return `<div class="hd"><h2>Leave</h2><button class="btn pri" data-a="newL">Apply for leave</button></div><div class="kpis">${Object.entries(D.bal).map(([k,v])=>`<div class="box"><b>${v[0]-v[1]}</b><span class="m">${k} days left of ${v[0]}</span></div>`).join('')}</div>
+<div class="box wrap"><table><tr><th>Employee</th><th>Type</th><th>Dates</th><th>Days</th><th>Status</th><th></th></tr>${D.leave.map(l=>`<tr><td>${l.e}</td><td>${l.ty}</td><td>${l.a} → ${l.b}</td><td>${l.d}</td><td>${b(l.s,sc(l.s))}</td><td>${l.s==='Manager Approval'?`<button class="btn" data-a="lv" data-id="${l.id}" data-to="Approved">Approve</button> <button class="btn" data-a="lv" data-id="${l.id}" data-to="Rejected">Reject</button>`:''}</td></tr>`).join('')}</table></div>
+<div class="rules">Balances shown are for Asha R. Approval checks the balance and needs the reporting manager.</div>`},
+admin(){const M=['Projects','Tasks','Defects','Change requests','Workflow config','Users'],P={'Project Manager':['CRUA','CRUAE','CRU','CRU','R','R'],'QA Lead':['R','RU','CRUA','R','R','R'],PMO:['CRUA','R','R','CRUA','R','R'],'Team Member':['R','RU','CR','CR','—','—'],Admin:['CRUDAEC','CRUDAEC','CRUDAEC','CRUDAEC','CRUDAEC','CRUDAEC']};
+return `<div class="hd"><h2>Roles & access</h2></div><div class="box wrap"><table><tr><th>Role</th>${M.map(m=>`<th>${m}</th>`).join('')}</tr>${ROLES.map(r=>`<tr><td>${r}</td>${P[r].map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</table></div><div class="rules">C create · R read · U update · D delete · A approve · E export · C configure. Use the role switcher (top right) to see the effect on transitions. Field-level and record-level permissions come with the real build.</div>`},
+x(){return `<h2>Documents & reports</h2><p class="m">Planned for phase 3.</p>`}};
+function render(){$('#nav').innerHTML='<h1>Enterprise PM</h1>'+NAV.map(n=>`<button data-a="nav" data-v="${n[0]}" class="${n[0]===view?'on':''}" ${n[0]==='x'?'disabled':''}>${n[1]}</button>`).join('');$('#v').innerHTML=V[view]()}
+function taskModal(id){const t=G('tasks',id),nx=D.wf[t.s]||[],subs=D.tasks.filter(x=>x.par===id);modal(`<h3>${t.id} · ${t.t}</h3><p>${b(t.s,sc(t.s))} ${b(t.pr)} ${t.par?b('sub of '+t.par):''}</p><p class="m">${pn(t.p)} · ${t.a} · due ${t.due} · ${t.h}h estimated</p>${subs.length?`<p class="m">Subtasks: ${subs.map(s=>s.id+' ('+s.s+')').join(', ')}</p>`:''}
+<h4>Move to</h4><div class="row">${nx.map(n=>`<button class="btn" data-a="mvT" data-id="${id}" data-to="${n}">${ok(t.s,n)?'':'🔒 '}${n}</button>`).join('')||'<span class="m">No transitions from this status</span>'}</div>
+<h4>Comments</h4>${(t.c||[]).map(c=>`<p class="cm">${c}</p>`).join('')}<div class="row"><input id="cmt" placeholder="Add a comment"><button class="btn" data-a="cmt" data-id="${id}">Post</button></div><div class="row"><button class="btn" data-a="close">Close</button></div>`)}
+function defModal(id){const d=G('defects',id),nx=D.dwf[d.s];modal(`<h3>${d.id} · ${d.t}</h3><p>${b(d.s,sc(d.s))} ${b(d.sev)} <span class="m">${d.env} · ${d.a||'unassigned'}</span></p>
+<label class="m">Root cause (required to close)</label><select data-c="rc" data-id="${id}"><option value="">Select…</option>${opts(['Code error','Requirement gap','Config','Data issue'],d.rc)}</select>
+<label class="m">Resolution category (required to close)</label><select data-c="rs" data-id="${id}"><option value="">Select…</option>${opts(['Fixed','Workaround','Not reproducible','Duplicate'],d.rs)}</select>
+<h4>Move to</h4><div class="row">${nx.map(n=>`<button class="btn" data-a="mvD" data-id="${id}" data-to="${n}">${ok(d.s,n)?'':'🔒 '}${d.s==='Closed'?'Reopen':n}</button>`).join('')}</div><div class="row"><button class="btn" data-a="close">Close window</button></div>`)}
+const fld=(l,i,t)=>`<label>${l}</label><input id="${i}" ${t?'type="'+t+'"':''}>`;
+const A={
+close(d,e,el){if(e.target===el)modal('')},
+nav(d){view=d.v;render()},
+ot(d){taskModal(d.id)},
+mvT(d){const t=G('tasks',d.id);if(!ok(t.s,d.to))return toast(lock(t.s,d.to),1);if(isc(d.to)&&D.tasks.some(x=>x.par===t.id&&!isc(x.s)))return toast('Parent task cannot close while subtasks are open',1);log(`${t.id}: ${t.s} → ${d.to}`);t.s=d.to;render();taskModal(t.id);toast('Moved to '+d.to)},
+cmt(d){const v=$('#cmt').value.trim();if(!v)return;const t=G('tasks',d.id);(t.c=t.c||[]).push(v);log('Comment on '+t.id);taskModal(t.id)},
+newT(){modal(`<h3>New task</h3>${fld('Title','f1')}<label>Project</label><select id="f2">${D.projects.map(p=>`<option value="${p.id}">${p.n}</option>`).join('')}</select><label>Assignee</label><select id="f3">${opts(D.users)}</select>${fld('Due date','f4','date')}<div class="row"><button class="btn pri" data-a="saveT">Create task</button><button class="btn" data-a="close">Cancel</button></div>`)},
+saveT(){const t=$('#f1').value.trim(),due=$('#f4').value;if(!t||!due)return toast('Title and due date are required',1);const id='T-'+(107+D.tasks.length-6);D.tasks.push({id,t,p:$('#f2').value,a:$('#f3').value,s:'Open',pr:'Medium',due,h:0});log('Created '+id);modal('');render();toast(id+' created')},
+newP(){modal(`<h3>New project</h3>${fld('Name','f1')}<label>Project manager</label><select id="f2"><option value="">Assign later</option>${opts(D.users)}</select>${fld('Start date','f3','date')}${fld('End date','f4','date')}<div class="row"><button class="btn pri" data-a="saveP">Create project</button><button class="btn" data-a="close">Cancel</button></div>`)},
+saveP(){const n=$('#f1').value.trim(),a=$('#f3').value,e=$('#f4').value;if(!n||!a||!e)return toast('Name, start date and end date are required',1);if(a>=e)return toast('Start date must be before end date',1);const id='P-'+(D.projects.length+1);D.projects.push({id,n,pm:$('#f2').value,s:'Draft',a,e});log('Created '+id);modal('');render()},
+act(d){const p=G('projects',d.id);if(!p.pm)return toast('Assign a project manager before activating',1);p.s='Active';log(p.id+' activated');render();toast(p.n+' is active')},
+od(d){defModal(d.id)},
+mvD(d){const x=G('defects',d.id);if(!ok(x.s,d.to))return toast(lock(x.s,d.to),1);if(d.to==='Closed'&&(!x.rc||!x.rs))return toast('Root cause and resolution category are required before closing',1);log(`${x.id}: ${x.s} → ${d.to}`);x.s=d.to;render();defModal(x.id)},
+newD(){modal(`<h3>Log defect</h3>${fld('Summary','f1')}${fld('Description','f2')}<label>Severity</label><select id="f3">${opts(['Critical','High','Medium','Low'],'Medium')}</select><label>Environment</label><select id="f4">${opts(['Dev','QA','UAT','Prod'])}</select><div class="row"><button class="btn pri" data-a="saveD">Log defect</button><button class="btn" data-a="close">Cancel</button></div>`)},
+saveD(){const t=$('#f1').value.trim();if(!t||!$('#f2').value.trim())return toast('Summary and description are required',1);const id='D-'+(25+D.defects.length-4);D.defects.push({id,t,sev:$('#f3').value,pr:'Medium',env:$('#f4').value,a:'',s:'New',rc:'',rs:''});log('Logged '+id);modal('');render()},
+crs(d){crSel=d.id;render()},
+adv(){const c=G('crs',crSel),n=D.crw[D.crw.indexOf(c.s)+1];if(c.s==='Impact Analysis'&&!c.imp)return toast('Complete the impact analysis before approval',1);if(!ok(c.s,n))return toast(lock(c.s,n),1);if(n==='Closed'&&!c.uat)return toast('UAT sign-off is required to close',1);log(`${c.id}: ${c.s} → ${n}`);c.s=n;render();toast(c.id+' is now '+n)},
+tgl(d){const a=D.wf[d.f],i=a.indexOf(d.t);i<0?a.push(d.t):a.splice(i,1);log(`Workflow: ${d.f} → ${d.t} ${i<0?'enabled':'disabled'}`);render()},
+newL(){modal(`<h3>Apply for leave</h3><label>Type</label><select id="f1">${opts(Object.keys(D.bal))}</select>${fld('From','f2','date')}${fld('To','f3','date')}${fld('Reason','f4')}<div class="row"><button class="btn pri" data-a="saveL">Submit request</button><button class="btn" data-a="close">Cancel</button></div>`)},
+saveL(){const a=$('#f2').value,e=$('#f3').value,r=$('#f4').value.trim();if(!a||!e||!r)return toast('Dates and reason are required',1);if(a>e)return toast('End date cannot be before start date',1);const d=Math.round((new Date(e)-new Date(a))/864e5)+1;D.leave.unshift({id:'L-'+(D.leave.length+1),e:'Asha R',ty:$('#f1').value,a,b:e,d,r,s:'Manager Approval'});log('Leave requested: '+d+' day(s)');modal('');render()},
+lv(d){const l=G('leave',d.id);if(d.to==='Approved'){if(!ok(l.s,'Approved'))return toast(lock(l.s,'Approved'),1);const bl=D.bal[l.ty];if(l.e==='Asha R'&&l.d>bl[0]-bl[1])return toast('Not enough '+l.ty+' balance',1);if(l.e==='Asha R')bl[1]+=l.d}l.s=d.to;log(`${l.id} ${d.to}`);render()}};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el&&A[el.dataset.a])A[el.dataset.a](el.dataset,e,el)});
+document.addEventListener('change',e=>{const el=e.target,c=el.dataset.c;if(!c)return;
+if(c==='pf'){pf=el.value;render()}
+else if(c==='pm'){G('projects',el.dataset.id).pm=el.value;log('PM assigned on '+el.dataset.id);render()}
+else if(c==='rc'||c==='rs')G('defects',el.dataset.id)[c]=el.value;
+else if(c==='imp'||c==='uat'){G('crs',crSel)[c]=el.checked?1:0;log(`${crSel}: ${c==='imp'?'impact analysis':'UAT sign-off'} ${el.checked?'done':'cleared'}`)}});
+$('#role').innerHTML=opts(ROLES,role);$('#role').onchange=e=>{role=e.target.value;toast('Now acting as '+role)};
+render();
+</script></body></html>
